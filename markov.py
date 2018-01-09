@@ -64,8 +64,20 @@ def make_chains(text_string):
 
 def make_text(chains):
     """Return text from chains."""
-
+    #  first time current key will give a random key .choice(key)
+    #  then append current key[0] to words
+    # get 
+    current_key = choice(chains.keys())
     words = []
+    while True:
+        if len(chains[current_key]) == 0:
+            words.append(str(current_key[0]) + " " + str(current_key[1]))
+            break
+        else:
+            words.append(str(current_key[0]))
+            next_value = choice(chains[current_key])
+            next_key = (current_key[1], next_value)
+            current_key = next_key
 
     # your code goes here
 
