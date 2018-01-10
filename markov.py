@@ -54,7 +54,6 @@ def make_chains(text_string, size):
         if n_gram not in chains:
             chains[n_gram] = []
 
-        
         chains[n_gram].append(words[i + size])
 
     return chains
@@ -62,13 +61,24 @@ def make_chains(text_string, size):
 
 def make_text(chains):
     """Return text from chains."""
-    current_key = choice(chains.keys())
+    start_keys = [key for key in chains.keys() if key[0][0].isupper()]
+    current_key = choice(start_keys)
+    end_punctuation = (".", "?", "!")
     words = []
+    last_index = None
     while True:
+        for i in range(len(current_key)):
+            if current_key[i][-1] in end_punctuation:
+                last_index = i
+
+        if last_index:
+            words.extend(current_key[:last_index + 1])
+            break
+
         if current_key[-1] is None:
             words.extend(current_key[:-1])
             break
-        
+
         words.append(current_key[0])
         next_value = choice(chains[current_key])
         current_key = current_key[1:] + (next_value,)
