@@ -52,10 +52,10 @@ def make_chains(text_string, size):
         n_gram = tuple([word for word in words[i:i + size]])
 
         if n_gram not in chains:
-            chains[n_gram] = [words[i + size]]
+            chains[n_gram] = []
 
-        else:
-            chains[n_gram].append(words[i + size])
+        
+        chains[n_gram].append(words[i + size])
 
     return chains
 
@@ -65,13 +65,13 @@ def make_text(chains):
     current_key = choice(chains.keys())
     words = []
     while True:
-        if not current_key[-1]:
+        if current_key[-1] is None:
             words.extend(current_key[:-1])
             break
-        else:
-            words.append(current_key[0])
-            next_value = choice(chains[current_key])
-            current_key = current_key[1:] + (next_value,)
+        
+        words.append(current_key[0])
+        next_value = choice(chains[current_key])
+        current_key = current_key[1:] + (next_value,)
 
     return " ".join(words)
 
