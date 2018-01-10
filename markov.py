@@ -11,7 +11,7 @@ def open_and_read_file(file_path):
     """
 
     with open(file_path) as our_file:
-        
+
         return our_file.read()
 
 
@@ -35,7 +35,7 @@ def make_chains(text_string):
 
         >>> chains[('hi', 'there')]
         ['mary', 'juanita']
-        
+
         >>> chains[('there','juanita')]
         [None]
     """
@@ -43,22 +43,18 @@ def make_chains(text_string):
     chains = {}
 
     words = text_string.split()
+    words.append(None)
 
-    for i in range(len(words) - 1):
+    for i in range(len(words) - 2):
 
         n_gram = (words[i], words[i+1])
 
-        if i == len(words) - 2:
-            chains[n_gram] = []
-
-        elif n_gram not in chains and i < len(words) - 2:    
+        if n_gram not in chains:
             chains[n_gram] = [words[i + 2]]
 
         else:
-            value = chains.get(n_gram, [])
-            value.append(words[i+2])
+            chains[n_gram].append(words[i+2])
 
-    
     return chains
 
 
@@ -66,20 +62,16 @@ def make_text(chains):
     """Return text from chains."""
     #  first time current key will give a random key .choice(key)
     #  then append current key[0] to words
-    # get 
     current_key = choice(chains.keys())
     words = []
     while True:
-        if len(chains[current_key]) == 0:
-            words.append(str(current_key[0]) + " " + str(current_key[1]))
+        if not current_key[-1]:
+            words.extend(current_key[:-1])
             break
         else:
-            words.append(str(current_key[0]))
+            words.append(current_key[0])
             next_value = choice(chains[current_key])
-            next_key = (current_key[1], next_value)
-            current_key = next_key
-
-    # your code goes here
+            current_key = (current_key[1], next_value)
 
     return " ".join(words)
 
